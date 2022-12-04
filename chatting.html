@@ -242,7 +242,14 @@
 					// // 调用websocket 发送消息到netty后端
 					var wsWebview = plus.webview.getWebviewById("sweetchat_chatlists.html");
 					// wsWebview.evalJS("CHAT.chat('" + JSON.stringify(dataContent) + "')");
-					wsWebview.evalJS("CHAT.chat('" + msg_text_val + "')");
+
+					// 构建ChatMsg
+					var chatMsg = new app.ChatMsg(me.id, friendUserId, msg_text_val, null);
+					// 构建DataContent
+					var dataContent = new app.DataContent(app.CHAT, chatMsg, null);
+					// 发送websocket
+					wsWebview.evalJS("CHAT.chat('" + JSON.stringify(dataContent) + "')");
+					console.log("发给对方的id" + friendUserId);
 
 					// // 保存聊天历史记录到本地缓存
 					// app.saveUserChatHistory(me.id, friendUserId, msg_text_val, 1);
@@ -253,13 +260,13 @@
 					} else {
 						friendFaceImage = app.imgServerUrl + friendFaceImage;
 					}
-					receiveMsg(friendFaceImage, "模拟接受消息~~~~~~");
+					//receiveMsg("模拟接受消息~~~~~~");
 				});
 			});
 
 			// 接受消息
-			function receiveMsg(friendFaceImg, msg) {
-
+			function receiveMsg(msg) {
+				var friendFaceImg = "image/face-default-cat.png";
 				var msgHtml = '<div class="friend_lists">' +
 					'<div class="header_img">' +
 					'<img src="' + friendFaceImg + '" width="40px" height="40px" />' +

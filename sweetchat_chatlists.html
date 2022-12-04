@@ -274,23 +274,29 @@
 				wsopen: function() {
 					console.log("websocket连接已建立...");
 
-					// var me = app.getUserGlobalItem();
-					// // 构建ChatMsg
-					// var chatMsg = new app.ChatMsg(me.id, null, null, null);
-					// // 构建DataContent
-					// var dataContent = new app.DataContent(app.CONNECT, chatMsg, null);
-					// // 发送websocket
-					// CHAT.chat(JSON.stringify(dataContent));
+					var me = app.getUserGlobalItem();
+					// 构建ChatMsg
+					var chatMsg = new app.ChatMsg(me.id, null, null, null);
+					// 构建DataContent
+					var dataContent = new app.DataContent(app.CONNECT, chatMsg, null);
+					// 发送websocket
+					CHAT.chat(JSON.stringify(dataContent));
 
-					// // 每次连接之后，获取用户的未读未签收消息列表
-					// fetchUnReadMsg();
+					// 每次连接之后，获取用户的未读未签收消息列表
+					//fetchUnReadMsg();
 
-					// // 定时发送心跳
-					// setInterval("CHAT.keepalive()", 10000);
+					// 定时发送心跳
+					setInterval("CHAT.keepalive()", 10000);
 				},
 				wsmessage: function(e) {
 					console.log("接受到消息：" + e.data);
 
+					// TODO 调用聊天webview的receiveMsg方法, 这里先写死，后面这里应该从服务器端来加载数据
+					var chatWebview = plus.webview.getWebviewById("chatting-2212041BFZ42NR40");
+					var msg = e.data;
+
+					chatWebview.evalJS("receiveMsg('" + e.data + "')");
+					chatWebview.evalJS('resizeScreen()');
 					// // 转换DataContent为对象
 					// var dataContent = JSON.parse(e.data);
 					// var action = dataContent.action;
