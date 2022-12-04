@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport"
+			content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/header.css" />
+		<link rel="stylesheet" href="./font_chat/iconfont.css" />
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+			mui.plusReady(function() {
+				plus.navigator.setStatusBarStyle("light");
+				plus.navigator.setStatusBarBackground("#C9394A");
+
+			});
+		</script>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title">
+			<h1 class="mui-title title-color">SweetChat</h1>
+		</header>
+
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item mui-active" tableIndex="0">
+				<span class="mui-icon iconfont icon-weixin"></span>
+				<span class="mui-tab-label">甜聊</span>
+			</a>
+			<a class="mui-tab-item" tableIndex="1">
+				<span class="mui-icon iconfont icon-tongxunlu"></span>
+				<span class="mui-tab-label">通讯录</span>
+			</a>
+			<a class="mui-tab-item" tableIndex="2">
+				<span class="mui-icon iconfont icon-faxian"></span>
+				<span class="mui-tab-label">发现</span>
+			</a>
+			<a class="mui-tab-item" tableIndex="3">
+				<span class="mui-icon iconfont icon-wo"></span>
+				<span class="mui-tab-label">我</span>
+			</a>
+		</nav>
+
+
+		<script type="text/javascript">
+			var sweetChatPageList = [{
+					pageId: "sweetchat_chatlists.html",
+					pageUrl: "sweetchat_chatlists.html"
+				},
+				{
+					pageId: "sweetchat_concat.html",
+					pageUrl: "sweetchat_concat.html"
+				},
+				{
+					pageId: "sweetchat_discovery.html",
+					pageUrl: "sweetchat_discovery.html"
+				},
+				{
+					pageId: "sweetchat_me.html",
+					pageUrl: "sweetchat_me.html"
+				}
+			];
+			var sweetChatHeaderStyle = {
+				top: "44px",
+				bottom: "50px"
+			}
+			mui.init();
+			mui.plusReady(function() {
+
+				mui.back = function() {
+					return false;
+				}
+				var currentWebView = plus.webview.currentWebview();
+				console.log("current " + currentWebView.getURL());
+				for (var i = 0; i < sweetChatPageList.length; i++) {
+
+					var pageWebView = plus.webview.create(sweetChatPageList[i].pageUrl, sweetChatPageList[i].pageId,
+						sweetChatHeaderStyle);
+					pageWebView.hide();
+					currentWebView.append(pageWebView);
+
+				}
+				console.log("show 0 page " + sweetChatPageList[0].pageId);
+				plus.webview.show(sweetChatPageList[0].pageId);
+
+
+				mui(".mui-bar-tab").on('tap', 'a', function() {
+					//获取tableIndex
+					var tableIndex = this.getAttribute("tableIndex");
+					//传值给详情页面，通知加载新数据
+					plus.webview.show(sweetChatPageList[tableIndex].pageId, "fade-in", 200);
+
+					for (var i = 0; i < sweetChatPageList.length; i++) {
+
+						if (i != tableIndex) {
+							plus.webview.hide(sweetChatPageList[i].pageId, "fade-out", 200);
+						}
+					}
+
+				});
+
+				// 延时加载
+				setTimeout("initData()", 1000);
+
+			});
+			// 预加载
+			function initData() {
+				var sweetchat_chatlists = plus.webview.getWebviewById("sweetchat_chatlists.html");
+				mui.fire(sweetchat_chatlists, "refresh");
+
+				var sweetchat_me = plus.webview.getWebviewById("sweetchat_me.html");
+				mui.fire(sweetchat_me, "refresh");
+			}
+		</script>
+	</body>
+</html>

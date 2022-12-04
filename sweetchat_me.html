@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport"
+			content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell mui-media">
+					<a id="link_myface" href="javascript:;">
+
+						<span class="mui-pull-right mui-icon mui-icon-arrowright"
+							style="line-height: 42px; color:lightgrey;margin-left: 3px;"></span>
+						<img id="id_my_face" class="mui-media-object mui-pull-right" src="image/bg.png">
+						<div class="mui-media-body" style="line-height: 42px; font-size: 16px;">
+							头像
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media">
+					<a id="link_my_nickname" href="javascript:;">
+						<span class="mui-pull-right mui-icon mui-icon-arrowright"
+							style="color:lightgrey;margin-left: 3px;"></span>
+						<span id="span_nickname" class="mui-pull-right" style="color: grey; font-size:14px;">大白菜</span>
+						<div class="mui-media-body">
+							昵称
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media">
+					<a href="javascript:;">
+						<span class="mui-pull-right mui-icon mui-icon-arrowright"
+							style="color:lightgrey;margin-left: 3px;"></span>
+						<span id="span_username" class="mui-pull-right" style="color: grey; font-size:14px;">大白菜</span>
+						<div class="mui-media-body">
+							账号
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media">
+					<a id="link_my_qrcode" href="javascript:;">
+						<span class="mui-pull-right mui-icon mui-icon-arrowright"
+							style="color: lightgray;margin-left: 3px;"></span>
+						<img class="mui-media-object mui-pull-right" src="image/qrcode.png"
+							style="max-width: 20px;height: 20px;">
+						<div class="mui-media-body">
+							我的二维码
+						</div>
+					</a>
+				</li>
+			</ul>
+
+
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell mui-media" style="text-align: center;">
+					<a id="logout" href="javascript:;">
+						<div class="mui-media-body">
+							退出登录
+						</div>
+					</a>
+			</ul>
+
+		</div>
+
+		<script src="js/mui.js"></script>
+		<script src="js/app.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function() {
+
+				var webView = plus.webview.currentWebview();
+
+				webView.addEventListener("show", function() {
+					refreshUserInfo();
+				});
+
+
+				// 页面跳转我的头像
+				var link_myface = document.getElementById("link_myface");
+				link_myface.addEventListener("tap", function() {
+					mui.openWindow("myface.html", "myface.html");
+
+				});
+
+				// link_my_nickname 跳转修改nickname
+				var link_my_nickname = document.getElementById("link_my_nickname");
+				link_my_nickname.addEventListener("tap", function() {
+
+					mui.openWindow("mynickname.html", "mynickname.html");
+
+				});
+
+				// 添加自定义事件，刷新更新的内容
+				window.addEventListener("refresh", function() {
+					refreshUserInfo();
+				});
+				// 二维码
+				var link_my_qrcode = document.getElementById("link_my_qrcode");
+				link_my_qrcode.addEventListener("tap", function() {
+
+					mui.openWindow({
+						url: "myQRCode.html",
+						id: "myQRCode.html"
+					});
+
+
+				});
+
+				// 退出
+				var logout = document.getElementById("logout");
+
+				logout.addEventListener("tap", function() {
+
+					//所有窗口对象 
+					var wvs = plus.webview.all();
+					//首页窗口对象 
+					var launch = plus.webview.getLaunchWebview();
+					//当前窗口对象
+					var self = plus.webview.currentWebview();
+					// 首页以及当前窗口对象，不关闭； 
+					for (var i = 0, len = wvs.length; i < len; i++) {
+						//选定某一页不关wvs[i].id === localStorage.homeWebId 
+						if (wvs[i].id === launch.id ||
+							wvs[i].id === self.id ||
+							wvs[i].id === localStorage.homeWebId) {
+							continue;
+						} else {
+							//关闭中间的窗口对象，为防止闪屏，不使用动画效果； 
+							wvs[i].close('none');
+						}
+					}
+					mui.openWindow('login.html', 'login.html');
+				})
+
+				function refreshUserInfo() {
+
+					var userInfo = app.getUserGlobalItem();
+					console.log("current user" + JSON.stringify(userInfo));
+					if (userInfo != null) {
+						var userName = userInfo.username;
+						var nickname = userInfo.nickname;
+						var faceImage = userInfo.faceImage;
+
+						if (app.isNotNull(faceImage)) {
+							var id_my_face = document.getElementById("id_my_face");
+							id_my_face.src = app.imgServerUrl + faceImage;
+						};
+						var span_nickname = document.getElementById("span_nickname");
+						span_nickname.innerHTML = nickname;
+
+						var span_username = document.getElementById("span_username");
+						span_username.innerHTML = userName;
+
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,37 @@
+{
+  "id": "3805905",
+  "name": "no name",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "797263",
+      "name": "我",
+      "font_class": "wo",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "6550621",
+      "name": "微信",
+      "font_class": "weixin",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "11372661",
+      "name": "发现",
+      "font_class": "faxian",
+      "unicode": "e8af",
+      "unicode_decimal": 59567
+    },
+    {
+      "icon_id": "18664716",
+      "name": "通讯录",
+      "font_class": "tongxunlu",
+      "unicode": "e6af",
+      "unicode_decimal": 59055
+    }
+  ]
+}
