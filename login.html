@@ -51,8 +51,8 @@
 
 		<div class="mui-content">
 			<div class="container-login100">
-				<div class="wrap-login100 p-t-85 p-b-20">
-					<form id="userform">
+				<div class="login-form-out wrap-login100 p-t-85 p-b-20">
+					<form class="login-form" id="userform">
 						<span class="login100-form-title p-b-70">
 							<h5>SweetChat</h5>
 						</span>
@@ -95,6 +95,12 @@
 					});
 
 				}
+
+
+				window.onresize = function() {
+					document.activeElement.scrollIntoView(false);
+				}
+
 				var userform = document.getElementById("userform");
 				var username = document.getElementById("username");
 				var txt_password = document.getElementById("txt_password");
