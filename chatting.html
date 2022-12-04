@@ -208,27 +208,31 @@
 				// 发送消息按钮的事件绑定
 				send.addEventListener("tap", function() {
 
-					// // 发送之前判断网络的状态
-					// var connectionStatus = plus.networkinfo.getCurrentType();
-					// if (connectionStatus == 0 || connectionStatus == 1) {
-					// 	app.showToast("请打开网络连接...", "error");
-					// 	return;
-					// }
+					// 发送之前判断网络的状态
+					var connectionStatus = plus.networkinfo.getCurrentType();
+					if (connectionStatus == 0 || connectionStatus == 1) {
+						app.showToast("请打开网络连接...", "error");
+						return;
+					}
 
-					// // 获取消息内容
-					// var msg_text_val = msg_text.value;
+					// 获取消息内容
+					var msg_text_val = msg_text.value;
 
-					// // 判断消息内容，如果长度等于0，则return
-					// if (msg_text_val.length === 0) {
-					// 	return;
-					// }
+					// 判断消息内容，如果长度等于0，则return
+					if (msg_text_val.length === 0) {
+						return;
+					}
 
-					// // 发送消息, 渲染消息的html到msg div之下
-					// sendMsg(app.imgServerUrl + me.faceImage, msg_text_val);
-					// // 情况消息文本框中的内容
-					// msg_text.value = "";
-					// // 发送消息完毕之后，把发送按钮的颜色改为灰白色
-					// send.setAttribute("class", "mui-btn-gray");
+					// 发送消息, 渲染消息的html到msg div之下
+					var faceImage = app.imgServerUrl + me.faceImage;
+					if (me.faceImage == null || me.faceImage == "") {
+						faceImage = "image/face-default-cat.png";
+					}
+					sendMsg(faceImage, msg_text_val);
+					// 情况消息文本框中的内容
+					msg_text.value = "";
+					// 发送消息完毕之后，把发送按钮的颜色改为灰白色
+					send.setAttribute("class", "mui-btn-gray");
 
 					// // 构建ChatMsg
 					// var chatMsg = new app.ChatMsg(me.id, friendUserId, msg_text_val, null);
@@ -236,23 +240,29 @@
 					// var dataContent = new app.DataContent(app.CHAT, chatMsg, null);
 
 					// // 调用websocket 发送消息到netty后端
-					// var wsWebview = plus.webview.getWebviewById("imooc-chatlist.html");
+					var wsWebview = plus.webview.getWebviewById("sweetchat_chatlists.html");
 					// wsWebview.evalJS("CHAT.chat('" + JSON.stringify(dataContent) + "')");
-					// //						wsWebview.evalJS("CHAT.chat('" + msg_text_val + "')");
+					wsWebview.evalJS("CHAT.chat('" + msg_text_val + "')");
 
 					// // 保存聊天历史记录到本地缓存
 					// app.saveUserChatHistory(me.id, friendUserId, msg_text_val, 1);
 					// app.saveUserChatSnapshot(me.id, friendUserId, msg_text_val, true);
-					//						receiveMsg("模拟接受消息~~~~~~");
+
+					if (friendFaceImage == null || friendFaceImage == "") {
+						friendFaceImage = "image/face-default-cat.png";
+					} else {
+						friendFaceImage = app.imgServerUrl + friendFaceImage;
+					}
+					receiveMsg(friendFaceImage, "模拟接受消息~~~~~~");
 				});
 			});
 
 			// 接受消息
-			function receiveMsg(msg) {
+			function receiveMsg(friendFaceImg, msg) {
 
 				var msgHtml = '<div class="friend_lists">' +
 					'<div class="header_img">' +
-					'<img src="' + app.imgServerUrl + friendFaceImage + '" width="40px" height="40px" />' +
+					'<img src="' + friendFaceImg + '" width="40px" height="40px" />' +
 					'</div>' +
 					'<div class="msg-wrapper right">' +
 					'<p class="msg-left-white">' + msg + '</p>' +
@@ -290,7 +300,7 @@
 
 			// 播放接受消息的铃声
 			function playReceiveMsgSound() {
-				var audioPlayer = plus.audio.createPlayer("/mp3/di_didi.mp3");
+				var audioPlayer = plus.audio.createPlayer("/mp3/wxreceive.mp3");
 				audioPlayer.play();
 			}
 

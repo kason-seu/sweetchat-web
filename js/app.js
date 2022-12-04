@@ -1,6 +1,12 @@
 window.app = {
 
-
+	/**
+	 * netty服务后端发布的url地址
+	 */
+	nettyServerUrl: 'ws://192.168.0.103:9999/ws',
+	/**
+	 * 后端地址
+	 */
 	serverurl: "http://192.168.0.103:8090",
 	imgServerUrl: "",
 	isNotNull: function(str) {

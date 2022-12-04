@@ -71,6 +71,9 @@
 				mui.back = function() {
 					return false;
 				}
+				// 对网络连接进行事件监听
+				netChangeSwitch();
+
 				var currentWebView = plus.webview.currentWebview();
 				console.log("current " + currentWebView.getURL());
 				for (var i = 0; i < sweetChatPageList.length; i++) {
@@ -111,6 +114,22 @@
 
 				var sweetchat_me = plus.webview.getWebviewById("sweetchat_me.html");
 				mui.fire(sweetchat_me, "refresh");
+			}
+			// 监听网络状态更改
+			function netChangeSwitch() {
+				document.addEventListener("netchange", function() {
+					// 网络状态获取和判断
+					var connectionStatus = plus.networkinfo.getCurrentType();
+					if (connectionStatus != 0 && connectionStatus != 1) {
+						// 重新打开网络连接
+						var muxin_title = document.getElementById("muxin_title");
+						muxin_title.innerHTML = "<b>SweetChat</b>";
+					} else {
+						// 关闭网络连接
+						var muxin_title = document.getElementById("muxin_title");
+						muxin_title.innerHTML = "<b>SweetChat(未连接)</b>";
+					}
+				});
 			}
 		</script>
 	</body>
